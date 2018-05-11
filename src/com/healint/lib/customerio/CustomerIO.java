@@ -27,31 +27,44 @@ public class CustomerIO {
 		this.apiKey = apiKey;
 	}
 
-	public boolean updateUser(String userId, Map<String, Object> attributes) throws Exception {
+	public boolean updateUser(String userId, Map<String, Object> attributes) {
 
 		String apiPath = CustomerIOURIs.URL_CUSTOMERS + "/" + userId;
 
-		return sendPut(apiPath, attributes);
+		try {
+			return sendPut(apiPath, attributes);
+		} catch (Exception ex) {
+			return false;
+		}
 	}
 
-	public boolean deleteUser(String userId) throws Exception {
+	public boolean deleteUser(String userId) {
 
 		String apiPath = CustomerIOURIs.URL_CUSTOMERS + "/" + userId;
 
-		return sendDelete(apiPath);
+		try {
+			return sendDelete(apiPath);
+		} catch (Exception ex) {
+			return false;
+		}
 	}
 
-	public boolean sendUserEvent(String userId, String eventName) throws Exception {
+	public boolean sendUserEvent(String userId, String eventName) {
 
 		String apiPath = CustomerIOURIs.URL_CUSTOMERS + "/" + userId + "/"
 				+ CustomerIOURIs.URL_EVENTS;
 
 		Map<String, Object> mapContent = new HashMap<>();
 		mapContent.put(CustomerIOConstants.PARAM_ATTRIBUTE_EVENT_NAME, eventName);
-		return sendPost(apiPath, mapContent);
+
+		try {
+			return sendPost(apiPath, mapContent);
+		} catch (Exception ex) {
+			return false;
+		}
 	}
 
-	public boolean updateUserTimezone(String userId, int timezoneOffset) throws Exception {
+	public boolean updateUserTimezone(String userId, int timezoneOffset) {
 
 		// filter if the timezone is in the supported list by customer.io
 		Optional<String> firstTimezone = firstTimezoneOffsetSupported(timezoneOffset);
@@ -68,7 +81,12 @@ public class CustomerIO {
 				}
 			};
 
-			return sendPut(apiPath, params);
+			try {
+				return sendPut(apiPath, params);
+			} catch (Exception ex) {
+				return false;
+			}
+
 
 		} else {
 			return false;
